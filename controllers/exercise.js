@@ -1,24 +1,31 @@
-import exerciseModel from "../Models/exerciseModel.js";
+import User from "../Models/userModel.js";
 
-// export const getUsers = async (req, res) => {
-//   try {
-//     const usersList = await userModel.find();
-//     res.status(200).json(usersList);
-//   } catch (error) {
-//     res.status(404).json({ message: error.message });
-//   }
-// };
+export const createUserExercise = async (req, res) => {
+  const date = req.body.date
+    ? new Date(req.body.date + "Z").toDateString()
+    : new Date().toDateString();
+  const { description, duration } = req.body;
+  const _id = req.body[":_id"];
 
-export const createUserExercise = (req, res) => {
-  console.log("Nicolas");
-  console.log(req.params.id);
-  // const userName = req.body;
-  // const newUser = new userModel(userName);
-
-  // try {
-  //   await newUser.save();
-  //   res.status(201).json(newUser);
-  // } catch (error) {
-  //   res.status(409).json({ message: error.message });
-  // }
+  const username = await User.findById(_id);
+  if (username) {
+    const addExercise = { description, duration, date };
+    User.findByIdAndUpdate(
+      { _id },
+      { $push: { log: [addExercise] } },
+      (err, result) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send({
+            _id,
+            username: username.username,
+            description,
+            duration,
+            date,
+          });
+        }
+      }
+    );
+  }
 };
