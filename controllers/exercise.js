@@ -1,6 +1,7 @@
 import User from "../Models/userModel.js";
 
 export const createUserExercise = async (req, res) => {
+  console.log(req.body);
   const date = req.body.date
     ? new Date(req.body.date + "Z").toDateString()
     : new Date().toDateString();
