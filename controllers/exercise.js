@@ -4,8 +4,9 @@ export const createUserExercise = async (req, res) => {
   const date = req.body.date
     ? new Date(req.body.date + "Z").toDateString()
     : new Date().toDateString();
-  const { description, duration } = req.body;
+  const { description } = req.body;
   const _id = req.body[":_id"];
+  const duration = Number(req.body.duration);
 
   const username = await User.findById(_id);
   if (username) {

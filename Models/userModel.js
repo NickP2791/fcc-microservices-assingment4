@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-// import Exercise from "./exerciseModel";
 
 const exerciseSchema = mongoose.Schema({
   description: { type: String, required: true },

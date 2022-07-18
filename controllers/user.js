@@ -21,3 +21,13 @@ export const createUser = async (req, res) => {
     res.status(409).json({ message: error.message });
   }
 };
+
+//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+//used for testing and development, deletes all the entries create by FCC test entries
+export const cleanUp = (req, res) => {
+  userModel.deleteMany({ username: { $regex: "^fcc" } }, function (err) {
+    if (err) console.log(err);
+  });
+
+  res.send("Success in deletions");
+};
