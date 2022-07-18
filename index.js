@@ -11,11 +11,7 @@ import userRoutes from "./routes/user.js";
 
 const app = express();
 
-app.use(
-  cors({
-    origin: "*",
-  })
-);
+app.use(cors());
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 
