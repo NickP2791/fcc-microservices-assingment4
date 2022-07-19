@@ -25,7 +25,7 @@ export const createUserExercise = async (req, res) => {
       const { description, duration, date } =
         addingExercise.log[addingExercise.log.length - 1];
 
-      res.send({ _id, username, description, duration, date });
+      res.json({ _id, username, description, duration, date });
     } catch (error) {
       res.send(error.massage);
     }
