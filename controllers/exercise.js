@@ -21,11 +21,11 @@ export const createUserExercise = async (req, res) => {
         },
         { returnDocument: "after" }
       );
-      const { _id, username } = addingExercise;
+      const { username } = addingExercise;
       const { description, duration, date } =
         addingExercise.log[addingExercise.log.length - 1];
 
-      res.json({ _id, username, description, duration, date });
+      res.json({ _id: id, username, description, duration, date });
     } catch (error) {
       res.send(error.massage);
     }
