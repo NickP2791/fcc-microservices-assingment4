@@ -9,25 +9,27 @@ export const createUserExercise = async (req, res) => {
   const _id = req.body[":_id"];
   const duration = Number(req.body.duration);
 
-  const username = await User.findById(_id);
-  if (username) {
-    const addExercise = { description, duration, date };
-    User.findByIdAndUpdate(
-      { _id },
-      { $push: { log: [addExercise] } },
-      (err, result) => {
-        if (err) {
-          res.send(err);
-        } else {
-          res.send({
-            _id,
-            username: username.username,
-            description,
-            duration,
-            date,
-          });
-        }
-      }
-    );
-  }
+  const addExercise = { description, duration, date };
+
+  const updateExercise = async (id) => {
+    try {
+      const addingExercise = await User.findByIdAndUpdate(
+        id,
+        {
+          $push: { log: [addExercise] },
+          $inc: { count: 1 },
+        },
+        { returnDocument: "after" }
+      );
+      const { _id, username } = addingExercise;
+      const { description, duration, date } =
+        addingExercise.log[addingExercise.log.length - 1];
+
+      res.send({ _id, username, description, duration, date });
+    } catch (error) {
+      res.send(error.massage);
+    }
+  };
+
+  updateExercise(_id);
 };

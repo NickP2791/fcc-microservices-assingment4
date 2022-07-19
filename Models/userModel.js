@@ -10,6 +10,7 @@ const exerciseSchema = mongoose.Schema({
 
 const userSchema = mongoose.Schema({
   username: "string",
+  count: Number,
   log: [exerciseSchema],
 });
 
