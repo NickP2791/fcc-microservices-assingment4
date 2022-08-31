@@ -23,7 +23,8 @@ export const createUserExercise = async (req, res) => {
 
     //execute update
     const result = await User.findByIdAndUpdate(id, addedInfo, options);
-    res.send({ _id: id, description, duration, date });
+    const username = await result.username;
+    res.send({ _id: id, username, description, duration, date });
   } catch (error) {
     console.log(error.message);
   }
