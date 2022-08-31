@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.get("/cleanup", cleanUp);
 router.get("/:id/logs", getUserLogs);
-router.post("/:id/exercises", createUserExercise);
+router.post("/:_id/exercises", createUserExercise);
 router.get("/", getUsers);
 router.post("/", createUser);
 

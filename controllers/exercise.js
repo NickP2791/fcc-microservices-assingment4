@@ -2,34 +2,29 @@ import User from "../Models/userModel.js";
 
 export const createUserExercise = async (req, res) => {
   console.log(req.body);
-  const date = req.body.date
-    ? new Date(req.body.date + "Z").toDateString()
-    : new Date().toDateString();
-  const { description } = req.body;
-  const _id = req.body[":_id"];
-  const duration = Number(req.body.duration);
+  try {
+    //extract information
+    const date = req.body.date
+      ? new Date(req.body.date + "Z").toDateString()
+      : new Date().toDateString();
+    const { description } = req.body;
+    const id = req.params._id;
+    const duration = Number(req.body.duration);
+    console.log("this is the id of the user: ", id);
 
-  const addExercise = { description, duration, date };
+    //build packet of info to update
+    const addExercise = { description, duration, date };
+    console.log(id, addExercise);
+    const addedInfo = {
+      $push: { log: [addExercise] },
+      $inc: { count: 1 },
+    };
+    const options = { returnDocument: "after" };
 
-  const updateExercise = async (id) => {
-    try {
-      const addingExercise = await User.findByIdAndUpdate(
-        id,
-        {
-          $push: { log: [addExercise] },
-          $inc: { count: 1 },
-        },
-        { returnDocument: "after" }
-      );
-      const { username } = addingExercise;
-      const { description, duration, date } =
-        addingExercise.log[addingExercise.log.length - 1];
-
-      return { _id: id, username, description, duration, date };
-    } catch (error) {
-      res.send(error.massage);
-    }
-  };
-
-  updateExercise(_id).then((data) => res.json(data));
+    //execute update
+    const result = await User.findByIdAndUpdate(id, addedInfo, options);
+    res.send({ _id: id, description, duration, date });
+  } catch (error) {
+    console.log(error.message);
+  }
 };
