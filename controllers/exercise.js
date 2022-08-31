@@ -25,11 +25,11 @@ export const createUserExercise = async (req, res) => {
       const { description, duration, date } =
         addingExercise.log[addingExercise.log.length - 1];
 
-      res.json({ _id: id, username, description, duration, date });
+      return { _id: id, username, description, duration, date };
     } catch (error) {
       res.send(error.massage);
     }
   };
 
-  updateExercise(_id);
+  updateExercise(_id).then((data) => res.json(data));
 };
