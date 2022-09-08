@@ -9,13 +9,15 @@ export const getUserLogs = async (req, res) => {
     const userLog = await userModel.findById(id);
     const { _id, username, count, log } = userLog;
 
-    if (from === undefined && to === undefined) {
+    if (from === undefined && to === undefined && limit === undefined) {
       res.status(200).json({ _id, username, count, log });
     } else {
-      let filtered;
+      let filtered = log;
       let queryFrom = new Date(from);
       let queryTo = new Date(to);
 
+      //observation, I think FCC is flawes as the to date is a < and not <=
+      //for test to run correctly. My opinion, to date should include date in result
       if (!!from && !!to === false) {
         filtered = log.filter((n) => new Date(n.date + "Z") >= queryFrom);
       } else if (!!from === false && !!to) {
@@ -27,10 +29,11 @@ export const getUserLogs = async (req, res) => {
             new Date(n.date + "Z") < queryTo
         );
       }
-      const logLength =
-        !!limit && limit < filtered.length ? limit : filtered.length;
 
-      filtered = filtered.slice(0, logLength);
+      const logLength = limit?.length ? limit : log.length;
+
+      filtered = filtered?.length ? filtered.slice(0, logLength) : log;
+
       res.status(200).json({ _id, username, count: logLength, log: filtered });
     }
   } catch (error) {
