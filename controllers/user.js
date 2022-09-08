@@ -13,15 +13,18 @@ export const getUserLogs = async (req, res) => {
       res.status(200).json({ _id, username, count, log });
     } else {
       let filtered;
+      let queryFrom = new Date(from);
+      let queryTo = new Date(to);
+
       if (!!from && !!to === false) {
-        filtered = log.filter((n) => new Date(n.date + "Z") >= new Date(from));
+        filtered = log.filter((n) => new Date(n.date + "Z") >= queryFrom);
       } else if (!!from === false && !!to) {
-        filtered = log.filter((n) => new Date(n.date + "Z") <= new Date(to));
+        filtered = log.filter((n) => new Date(n.date + "Z") <= queryTo);
       } else if (!!from && !!to) {
         filtered = log.filter(
           (n) =>
-            new Date(from) >= new Date(n.date + "Z") &&
-            new Date(n.date + "Z") <= new Date(to)
+            new Date(n.date + "Z") >= queryFrom &&
+            new Date(n.date + "Z") < queryTo
         );
       }
       const logLength =
